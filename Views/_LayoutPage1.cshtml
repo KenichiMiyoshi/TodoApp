@@ -1,0 +1,15 @@
+﻿<!DOCTYPE html>
+<!-- レイザーはHTMLにC#のコードを埋め込むものでビューエンジンと呼ばれる。アットで始まるものがサーバーサイドで処理される -->
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        @RenderBody()
+    </div>
+</body>
+</html>
