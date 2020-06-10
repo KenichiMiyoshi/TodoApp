@@ -10,6 +10,8 @@ using TodoApp.Models;
 
 namespace TodoApp.Controllers
 {
+    //認証されている時のみコントローラーにアクセスできる
+    [Authorize]
     //コントローラークラスの継承が必要
     public class TodoesController : Controller
     {

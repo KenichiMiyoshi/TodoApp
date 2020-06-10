@@ -9,7 +9,14 @@
 </head>
 <body>
     <div class="container">
-        @RenderBody()
+        <!--ログインしていればtrueが返ってくるプロパティ-->
+        @if (Request.IsAuthenticated)
+        {
+            @Html.ActionLink("ログアウト", "SignOut", new { Controller = "Login" })
+        }
     </div>
+        <div class="container">
+            @RenderBody()
+        </div>
 </body>
 </html>
