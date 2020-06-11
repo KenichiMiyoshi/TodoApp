@@ -11,8 +11,8 @@ namespace TodoApp.Models
 	{
 		//DBを格納するデータセットのプロパティ
 		public DbSet<Todo> Todoes { get; set; }
-		//public DbSet<User> Users { get; set; }
-		//public DbSet<Role> Roles { get; set; }
+		public DbSet<User> Users { get; set; }
+		public DbSet<Role> Roles { get; set; }
 
 	}
 }
