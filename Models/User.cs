@@ -27,10 +27,12 @@ namespace TodoApp.Models
         //ナビゲーションプロパティ。ユーザーは複数のロールを持てる
         public virtual ICollection<Role> Roles { get; set; }
 
+        [Required]
         [NotMapped]
         [DisplayName("ロール")]
         public List<int> RoleIds { get; set; }
 
+        public virtual ICollection<Todo> Todoes { get; set; }
 
     }
 

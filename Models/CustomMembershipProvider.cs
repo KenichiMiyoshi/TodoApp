@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Security;
 
@@ -112,8 +113,11 @@ namespace TodoApp.Models
             //using構文の間だけdb変数が有効になるのでクローズ処理は不要
             using (var db = new TodoesContext())
             {
+
+                string hash = this.GeneratePasswordHash(username, password);
+
                 //FirstOrDefaultで該当があれば先頭の要素、なければnullを返す
-                var user = db.Users.Where(u => u.UserName == username && u.Password == password).FirstOrDefault();
+                var user = db.Users.Where(u => u.UserName == username && u.Password == hash).FirstOrDefault();
 
                 if (user != null)
                 {
@@ -122,5 +126,20 @@ namespace TodoApp.Models
             }
             return false;
         }
+
+        public string GeneratePasswordHash(string username, string password)
+        {
+            string rawSalt = $"secret_{username}";
+            var sha256 = new SHA256CryptoServiceProvider();
+            //文字列をバイト配列に変換しハッシュ値を計算
+            var salt = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(rawSalt));
+            //インスタンス化
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000);
+            var hash = pbkdf2.GetBytes(32);
+            //バイト配列を文字列に変換
+            return Convert.ToBase64String(hash);
+        }
+
+
     }
 }

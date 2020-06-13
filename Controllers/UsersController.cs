@@ -15,6 +15,8 @@ namespace TodoApp.Controllers
     {
 
         private TodoesContext db = new TodoesContext();
+        //メンバーシッププロバイダーのインスタンスを保持
+        readonly private CustomMembershipProvider membershipProvider = new CustomMembershipProvider();
 
         // GET: Users
         public ActionResult Index()
@@ -58,6 +60,8 @@ namespace TodoApp.Controllers
             if (ModelState.IsValid)
             {
                 user.Roles = roles;
+
+                user.Password = this.membershipProvider.GeneratePasswordHash(user.UserName, user.Password);
 
                 db.Users.Add(user);
                 db.SaveChanges();
@@ -103,7 +107,12 @@ namespace TodoApp.Controllers
                 }
 
                 dbUser.UserName = user.UserName;
-                dbUser.Password = user.Password;
+
+                if (!dbUser.Password.Equals(user.Password))
+                {
+                    dbUser.Password = this.membershipProvider.GeneratePasswordHash(user.UserName, user.Password);
+                }
+
                 dbUser.Roles.Clear();
                 foreach (var role in roles)
                 {

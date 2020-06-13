@@ -22,8 +22,16 @@ namespace TodoApp.Controllers
         //メソッド(index)。ブラウザからアクセスがあると呼ばれる。アクションメソッド
         public ActionResult Index()
         {
-            //viewメソッド。ヘルパーメソッド
-            return View(db.Todoes.ToList());
+            var user = db.Users.Where(item => item.UserName == User.Identity.Name).FirstOrDefault();
+
+            if (user != null)
+            {
+                //viewメソッド。ヘルパーメソッド
+                return View(user.Todoes);
+            }
+            //空のリストを返す
+            return View(new List<Todo>());
+
         }
 
         // GET: Todoes/Details/5
@@ -61,12 +69,19 @@ namespace TodoApp.Controllers
             //IsValidは入力が適切かどうかを返す
             if (ModelState.IsValid)
             {
-                db.Todoes.Add(todo);
-                db.SaveChanges();
-                //RedirectToActionは指定されたアクションメソッドに処理を転送するヘルパーメソッド
-                return RedirectToAction("Index");
-            }
 
+                var user = db.Users.Where(item => item.UserName == User.Identity.Name).FirstOrDefault();
+
+                if (user != null)
+                {
+                    todo.User = user;
+
+                    db.Todoes.Add(todo);
+                    db.SaveChanges();
+                    //RedirectToActionは指定されたアクションメソッドに処理を転送するヘルパーメソッド
+                    return RedirectToAction("Index");
+                }
+            }
             return View(todo);
         }
 
